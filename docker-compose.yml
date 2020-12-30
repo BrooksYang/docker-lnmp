@@ -1,0 +1,61 @@
+version: "3"
+
+networks:
+  backend:
+    driver: bridge
+
+services:
+  mysql:
+    image: mysql:${MYSQL_VERSION}
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ${DATA_PATH_HOST}/mysql:/var/lib/mysql
+      # - ./mysql/mysql.cnf:/etc/mysql/my.cnf # mysql config file
+    ports:
+      - "${MYSQL_PORT}:3306"
+    networks:
+      - backend
+
+  redis:
+    image: redis
+    restart: always
+    volumes:
+      - ${DATA_PATH_HOST}/redis:/data
+      # - ./conf/redis/redis.conf:/etc/redis/redis.conf
+    ports:
+      - "${REDIS_PORT}:6379"
+    networks:
+      - backend
+
+  # php-fpm
+  php-fpm:
+    build:
+      context: ./php-fpm
+      args:
+        - PHP_VERSION=${PHP_VERSION}
+    volumes:
+      - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini
+      - ${APP_CODE_PATH_HOST}:/var/www
+    networks:
+      - backend
+    expose:
+      - "9000"
+
+  nginx:
+    image: nginx
+    volumes:
+      - ${APP_CODE_PATH_HOST}:/var/www
+      - ./nginx/sites:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+      - "443:443"
+      - "9100:9100"
+    depends_on:
+      - php-fpm
+    networks:
+      - backend
