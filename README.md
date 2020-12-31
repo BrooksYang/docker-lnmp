@@ -21,3 +21,17 @@ run
 ```
 docker-compose up -d
 ```
+
+reload nginx
+```
+docker exec -it [nginx contianer id/name]  nginx -s reload
+```
+
+or
+```
+# exec nginx container
+docker exec -it [nginx container id/name] bash
+
+# reload nginx
+nginx -s reload
+```
