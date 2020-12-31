@@ -1,6 +1,6 @@
 # Docker LNMP environment
 
-# Usage
+## Usage
 clone
 ```
 git clone https://github.com/BrooksYang/docker-lnmp.git
@@ -22,9 +22,15 @@ run
 docker-compose up -d
 ```
 
-reload nginx
+## Reload nginx
+reload by docker-compose
 ```
-docker exec -it [nginx contianer id/name]  nginx -s reload
+docker-compose exec nginx nginx -s reload
+```
+
+reload by docker
+```
+docker exec [nginx contianer id/name]  nginx -s reload
 ```
 
 or
