@@ -30,7 +30,7 @@ docker-compose exec nginx nginx -s reload
 
 reload by docker
 ```
-docker exec [nginx contianer id/name]  nginx -s reload
+docker exec [nginx container id/name]  nginx -s reload
 ```
 
 or
