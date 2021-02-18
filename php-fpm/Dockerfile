@@ -16,10 +16,10 @@ ARG PHP_VERSION
 # always run apt update when start and after add new source list, then clean up at end.
 RUN apt-get update -yqq \
     && pecl channel-update pecl.php.net \
-    && apt-get install -y apt-utils openssl libssl-dev git libzip-dev zip unzip inetutils-ping \
+    && apt-get install -y apt-utils openssl libssl-dev git libzip-dev zip unzip inetutils-ping libgmp-dev \
     && docker-php-ext-configure zip \
     # Install extensions
-    && docker-php-ext-install zip mysqli pdo_mysql bcmath pcntl tokenizer \
+    && docker-php-ext-install zip mysqli pdo_mysql bcmath pcntl tokenizer gmp \
     # Install composer
     && curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/bin/composer
