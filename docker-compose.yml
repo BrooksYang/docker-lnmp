@@ -7,6 +7,7 @@ networks:
 services:
   mysql:
     image: mysql:${MYSQL_VERSION}
+    container_name: mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
     environment:
@@ -22,6 +23,7 @@ services:
 
   redis:
     image: redis
+    container_name: reids
     restart: always
     volumes:
       - ${DATA_PATH_HOST}/redis:/data
@@ -37,6 +39,7 @@ services:
       context: ./php-fpm
       args:
         - PHP_VERSION=${PHP_VERSION}
+    container_name: php-fpm
     volumes:
       - ./php-fpm/php${PHP_VERSION}.ini:/usr/local/etc/php/php.ini
       - ${APP_CODE_PATH_HOST}:/var/www
@@ -47,6 +50,7 @@ services:
 
   nginx:
     image: nginx
+    container_name: nginx
     volumes:
       - ${APP_CODE_PATH_HOST}:/var/www
       - ./nginx/sites:/etc/nginx/conf.d
